@@ -17,7 +17,6 @@ library(raster)
 library(tidyverse)
 library(tidycensus)
 library(terra)
-library(mapview)
 library(sf)
 library(ggpubr)
 
