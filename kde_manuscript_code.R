@@ -291,7 +291,7 @@ library(ggpubr)
                   # Objective 2: intervention effect estimation across bandwidths 
                   #-------------------------------------------------------------
                   
-                  kde_results <- kde_results2%>%
+                  kde_results <- kde_results%>%
                     mutate(post = ifelse(year > 2016, 1, 0))  #intervention indicator
 
                   #empty list to store model results across bandwidth values
