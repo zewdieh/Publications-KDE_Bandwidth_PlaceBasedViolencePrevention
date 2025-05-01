@@ -99,7 +99,7 @@ library(ggpubr)
                             "| Crime type:", c, "| Year:", i, ":", x$n, "points"))
               } 
               
-              #set bandwidth - 500, 5000, data driven 
+              #set data driven bandwidth (CvL, Diggle)
               if (b == "bw_default_cvl") {
                 sig <- bw.CvL(vcrime_ppp)
               } else if (b == "bw_default_dig") {
