@@ -46,7 +46,7 @@ library(here)
         vcrime <- readRDS("data/kde_manuscript_crime_data.RDS")
 
 #-------------------------------------------------------------------------------  
-#     Objective 1: Quantify variability in data-driven bandwidth selectors
+#      Objective 1: Quantify variability in data-driven bandwidth selectors
 #-------------------------------------------------------------------------------
         #set up parameters for loop        
         years <- c(2013:2023) 
@@ -127,7 +127,7 @@ library(here)
         }
 
         #-----------------------------------------------------------------------
-        #                   Objective 1: Visualizations 
+        #                 1.1: Visualizations (Table 1 and Figure 2)
         #-----------------------------------------------------------------------
         
         #Table 1
@@ -203,7 +203,7 @@ library(here)
           set.seed(seed)
           
           #-------------------------------------------------------------
-          #    Objective 2: create adjusted crime data 
+          #              2.1: Create adjusted crime data 
           #-------------------------------------------------------------
           
           #randomize treated lots
@@ -242,7 +242,7 @@ library(here)
             mutate(year = as.integer(year))
           
           #---------------------------------------------------------------------
-          #    Objective 2: simulate over bandwidths - kernel density estimation 
+          #    2.2.1: Simulate over bandwidths - kernel density estimation 
           #---------------------------------------------------------------------
           #set up storage for this iteration
           kde_results_iter <- data.frame()
@@ -297,7 +297,7 @@ library(here)
             }
             
             #---------------------------------------------------------------------
-            #    Objective 2: simulate over bandwidths - regression model
+            #          2.2.2: Simulate over bandwidths - regression model 
             #---------------------------------------------------------------------
             kde_bw <- kde_results_iter%>%
               filter(bw_value == b)%>%
@@ -323,16 +323,16 @@ library(here)
           
           #save outputs from this set of iterations
           saveRDS(kde_results_iter,
-                  file = sprintf("/analysis/sim_rds/kde_results_iter%02d.rds", i))
+                  file = sprintf("analysis/sim_rds/kde_results_iter%02d.rds", i))
           saveRDS(model_results_iter,
-                  file = sprintf("/analysis/sim_rds/model_results_iter%02d.rds", i))
+                  file = sprintf("analysis/sim_rds/model_results_iter%02d.rds", i))
         }
         
         #-----------------------------------------------------------------------
-        #    Objective 2: simulate over bandwidths - average results for viz
+        #                    2.3: Pool and average results 
         #-----------------------------------------------------------------------
         
-        model_files <- list.files("/analysis/sim_rds", pattern = "model_results_iter.*rds", full.names = T)
+        model_files <- list.files("analysis/sim_rds", pattern = "model_results_iter.*rds", full.names = T)
         model_results_all <- map_dfr(model_files, readRDS)
         
         #summarize across iterations
@@ -349,14 +349,14 @@ library(here)
             exp_upper = exp(mean_coef + sd_coef))
         
         #-----------------------------------------------------------------------
-        #    Objective 2: simulate over bandwidths - plots 
+        #                    2.4: Visualizations (Figure 3)
         #-----------------------------------------------------------------------
         
         #prep iteration-level data for spaghetti lines
         bandwidth_effects_iter <- model_results_all%>%
           mutate(exp_est = exp(coef))
         
-        #Fig 3
+        #Figure 3. Simulated effect sizes across bandwidth sizes
         ggplot() +
           # spaghetti lines (each iteration faint)
           geom_line(data = bandwidth_effects_iter,
